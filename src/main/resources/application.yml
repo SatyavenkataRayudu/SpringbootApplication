@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: springboot-app
+
+server:
+  port: 8080
+  shutdown: graceful
+
+# AWS Configuration
+aws:
+  s3:
+    bucket: ${AWS_S3_BUCKET:my-artifacts-bucket-20260427170349}
+  region: ${AWS_REGION:us-east-1}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+    software.amazon.awssdk: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

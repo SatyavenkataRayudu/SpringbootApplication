@@ -1,0 +1,79 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: my-eks-cluster
+  region: us-east-1
+  version: "1.33"
+
+# IAM OIDC & Service Accounts
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: aws-load-balancer-controller
+      namespace: kube-system
+    wellKnownPolicies:
+      awsLoadBalancerController: true
+  - metadata:
+      name: ebs-csi-controller-sa
+      namespace: kube-system
+    wellKnownPolicies:
+      ebsCSIController: true
+
+# Managed Node Groups
+managedNodeGroups:
+  - name: ng-1
+    instanceType: t3.medium
+    desiredCapacity: 3
+    minSize: 2
+    maxSize: 5
+    volumeSize: 30
+    volumeType: gp3
+    privateNetworking: true
+    ssh:
+      allow: true
+      publicKeyName: my-eks-cluster
+    labels:
+      role: worker
+      environment: production
+    tags:
+      nodegroup-role: worker
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+        autoScaler: true
+        externalDNS: true
+        certManager: true
+        appMesh: true
+        ebs: true
+        fsx: true
+        efs: true
+        albIngress: true
+        cloudWatch: true
+
+# VPC Configuration
+vpc:
+  cidr: 172.31.0.0/16
+  nat:
+    gateway: Single
+  clusterEndpoints:
+    publicAccess: true
+    privateAccess: true
+
+# CloudWatch Logging
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+    logRetentionInDays: 7
+
+# Addons
+addons:
+- name: vpc-cni
+  version: latest
+- name: coredns
+  version: latest
+- name: kube-proxy
+  version: latest
+- name: aws-ebs-csi-driver
+  version: latest

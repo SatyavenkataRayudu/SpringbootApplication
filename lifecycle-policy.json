@@ -1,0 +1,10 @@
+﻿{
+  "Rules": [{
+    "Id": "DeleteOldArtifacts",
+    "Status": "Enabled",
+    "Prefix": "artifacts/",
+    "Expiration": {
+      "Days": 90
+    }
+  }]
+}

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: springboot-app-config
+  namespace: production
+data:
+  SPRING_PROFILES_ACTIVE: "production"
+  SERVER_PORT: "8080"
+  JAVA_OPTS: "-Xmx512m -Xms256m"
+  # Add S3 bucket configuration
+  AWS_S3_BUCKET: "my-artifacts-bucket-20260427170349"
+  AWS_REGION: "us-east-1"
