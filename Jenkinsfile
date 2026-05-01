@@ -93,8 +93,8 @@ pipeline {
             steps {
                 sh '''
                 whoami
-                ls -la /var/jenkins/.m2
-                cat /var/jenkins/.m2/settings.xml || echo "NOT FOUND"
+                ls -la /var/lib/jenkins/.m2
+                cat /var/lib/jenkins/.m2/settings.xml || echo "NOT FOUND"
                 '''
             }
         }
