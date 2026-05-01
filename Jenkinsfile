@@ -17,6 +17,7 @@ pipeline {
         IMAGE_TAG = "${APP_VERSION}"
 
         TRIVY_CACHE_DIR = "/var/lib/trivy"
+        TMPDIR = "/var/lib/trivy/tmp"
         
         // EKS Configuration
         EKS_CLUSTER_NAME = 'my-eks-cluster'
@@ -138,15 +139,23 @@ pipeline {
             steps {
                 script {
                     sh """
-                        trivy image --cache-dir /var/lib/trivy \
-                        --severity HIGH,CRITICAL \
-                        --format json \
-                        --output trivy-report.json \
-                        ${IMAGE_URI}:${IMAGE_TAG}
-                        
-                        trivy image --severity HIGH,CRITICAL \
-                        --exit-code 1 \
-                        ${IMAGE_URI}:${IMAGE_TAG}
+                        export TRIVY_CACHE_DIR=/var/lib/trivy
+                        export TMPDIR=/var/lib/trivy/tmp
+        
+                        mkdir -p \$TMPDIR
+        
+                        trivy image \
+                          --cache-dir \$TRIVY_CACHE_DIR \
+                          --severity HIGH,CRITICAL \
+                          --format json \
+                          --output trivy-report.json \
+                          ${IMAGE_URI}:${IMAGE_TAG}
+        
+                        trivy image \
+                          --cache-dir \$TRIVY_CACHE_DIR \
+                          --severity HIGH,CRITICAL \
+                          --exit-code 1 \
+                          ${IMAGE_URI}:${IMAGE_TAG}
                     """
                 }
             }
