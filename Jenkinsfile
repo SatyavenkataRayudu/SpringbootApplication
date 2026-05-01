@@ -92,8 +92,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        mvn deploy -DskipTests \
-                        -DaltDeploymentRepository=nexus::default::http://18.234.254.90:8081/repository/maven-releases/
+                        sh 'mvn clean deploy -DskipTests'
                     """
                 }
             }
