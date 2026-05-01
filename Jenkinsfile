@@ -15,6 +15,8 @@ pipeline {
         ECR_REPOSITORY = "${APP_NAME}"
         IMAGE_URI = "${ECR_REGISTRY}/${ECR_REPOSITORY}"
         IMAGE_TAG = "${APP_VERSION}"
+
+        TRIVY_CACHE_DIR = "/var/lib/trivy"
         
         // EKS Configuration
         EKS_CLUSTER_NAME = 'my-eks-cluster'
@@ -136,7 +138,8 @@ pipeline {
             steps {
                 script {
                     sh """
-                        trivy image --severity HIGH,CRITICAL \
+                        trivy image --cache-dir /var/lib/trivy \
+                        --severity HIGH,CRITICAL \
                         --format json \
                         --output trivy-report.json \
                         ${IMAGE_URI}:${IMAGE_TAG}
