@@ -22,7 +22,10 @@
         <java.version>17</java.version>
         <sonar.organization>your-org</sonar.organization>
         <sonar.host.url>http://sonarqube:9000</sonar.host.url>
-    </properties>
+         
+       <!-- 🔥 Fix CRITICAL vulnerability -->
+        <tomcat.version>10.1.53</tomcat.version>
+     </properties>
     
     <dependencies>
         <dependency>
