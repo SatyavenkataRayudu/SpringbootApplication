@@ -222,7 +222,6 @@ pipeline {
                     sh """
                         aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
 
-                        kubectl apply -f k8s/aws-auth-configmap.yaml
                         kubectl apply -f k8s/namespace.yaml
                         kubectl apply -f k8s/configmap.yaml -n ${K8S_NAMESPACE}
                         kubectl apply -f k8s/secret.yaml -n ${K8S_NAMESPACE}
