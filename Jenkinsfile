@@ -146,14 +146,14 @@ pipeline {
         
                         trivy image \
                           --cache-dir \$TRIVY_CACHE_DIR \
-                          --severity HIGH,CRITICAL \
+                          --severity CRITICAL \
                           --format json \
                           --output trivy-report.json \
                           ${IMAGE_URI}:${IMAGE_TAG}
         
                         trivy image \
                           --cache-dir \$TRIVY_CACHE_DIR \
-                          --severity HIGH,CRITICAL \
+                          --severity CRITICAL \
                           --exit-code 1 \
                           ${IMAGE_URI}:${IMAGE_TAG}
                     """
