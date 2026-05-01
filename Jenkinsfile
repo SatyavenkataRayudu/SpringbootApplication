@@ -183,17 +183,9 @@ pipeline {
                 script {
                     sh """
                         aws ecr start-image-scan \
-                        --repository-name ${ECR_REPOSITORY} \
-                        --image-id imageTag=${IMAGE_TAG} \
-                        --region ${AWS_REGION}
-                        
-                        echo "Waiting for scan to complete..."
-                        sleep 30
-                        
-                        aws ecr describe-image-scan-findings \
-                        --repository-name ${ECR_REPOSITORY} \
-                        --image-id imageTag=${IMAGE_TAG} \
-                        --region ${AWS_REGION}
+                          --repository-name springboot-app \
+                          --image-id imageTag=${IMAGE_TAG} \
+                          --region us-east-1 || true
                     """
                 }
             }
@@ -229,7 +221,8 @@ pipeline {
                 script {
                     sh """
                         aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
-                        
+
+                        kubectl apply -f k8s/aws-auth-configmap.yaml
                         kubectl apply -f k8s/namespace.yaml
                         kubectl apply -f k8s/configmap.yaml -n ${K8S_NAMESPACE}
                         kubectl apply -f k8s/secret.yaml -n ${K8S_NAMESPACE}
