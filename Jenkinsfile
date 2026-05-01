@@ -94,7 +94,7 @@ pipeline {
                 sh '''
                 whoami
                 ls -la /home/jenkins/.m2
-                cat /home/jenkins/.m2/settings.xml || echo "NOT FOUND"
+                cat /var/jenkins/.m2/settings.xml || echo "NOT FOUND"
                 '''
             }
         }
@@ -104,7 +104,7 @@ pipeline {
         stage('Publish to Nexus') {
             steps {
                 script {
-                    sh 'mvn clean deploy -DskipTests'
+                    sh 'mvn clean deploy -DskipTests --settings /var/lib/jenkins/.m2/settings.xml'
                 }
             }
         }
