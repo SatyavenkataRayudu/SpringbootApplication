@@ -87,6 +87,19 @@ pipeline {
                 sh 'mvn package -DskipTests'
             }
         }
+
+        
+        stage('Check Maven Config') {
+            steps {
+                sh '''
+                whoami
+                ls -la /home/jenkins/.m2
+                cat /home/jenkins/.m2/settings.xml || echo "NOT FOUND"
+                '''
+            }
+        }
+
+        
         
         stage('Publish to Nexus') {
             steps {
