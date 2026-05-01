@@ -91,9 +91,7 @@ pipeline {
         stage('Publish to Nexus') {
             steps {
                 script {
-                    sh """
-                        sh 'mvn clean deploy -DskipTests'
-                    """
+                    sh 'mvn clean deploy -DskipTests'
                 }
             }
         }
